@@ -1,0 +1,31 @@
+{
+  "name": "team_profile_generator",
+  "version": "1.0.0",
+  "description": "Node.js command line application that takes in employee information and generates html webpage with summaries for each person",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FenixS83/team_profile_generator.git"
+  },
+  "keywords": [
+    "node.js",
+    "command-line",
+    "team-builder"
+  ],
+  "author": "Fenix Sampson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FenixS83/team_profile_generator/issues"
+  },
+  "homepage": "https://github.com/FenixS83/team_profile_generator#readme",
+  "dependencies": {
+    "inquirer": "^8.2.0",
+    "jest": "^27.2.5"
+  }
+}
