@@ -2,10 +2,22 @@ const Employee = require("./lib/Employee");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
+const generateHTML = require("./src/generateHTML");
 const inquirer = require("inquirer");
 const fs = require("fs");
-const {managerQuestions, engineerQuestions, internQuestions} = require("./src/questions");
+const {employeeQuestions, managerQuestions, engineerQuestions, internQuestions} = require("./src/questions");
 
+
+menu = () => {
+    createEmployee = async () => {
+    const answers = await inquirer.prompt(employeeQuestions);
+    console.log(answers);
+    const employee = new Employee(answers.name, answers.id, answers.email);
+    console.log(employee)
+ 
+     };
+     createEmployee();
+ }
 
 menu = () => {
    createManager = async () => {
@@ -40,6 +52,9 @@ menu = () => {
 
 
 menu();
+
+generateHTML();
+
 
 
 
