@@ -10,7 +10,7 @@ describe(`Engineer`, () =>{
     });
 
     test(`Successfully set a engineer object via constructor arguements`, () => {   
-        const engineer = new Engineer(`Brent`, 2, `graves.brent@gmail.com`);
+        const engineer = new Engineer(`Brent`, 2, `graves.brent@gmail.com`, `grave019`);
         expect(typeof(engineer.name)).toBe(`string`);
         expect(typeof(engineer.id)).toBe(`number`);
         expect(typeof(engineer.email)).toBe(`string`);
@@ -43,7 +43,7 @@ describe(`Engineer`, () =>{
 
     test(`Should get the role of the Engineer`, () => {
         const engineer = new Engineer(`Brent`, 2, `graves.brent@gmail.com`, github);
-        expect(engineeer.getRole()).toBe(`Engineer`);
+        expect(engineer.getRole()).toBe(`Engineer`);
     });
 
     test(`Should get the Github username using getGithub()`, () => {
