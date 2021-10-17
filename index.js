@@ -8,6 +8,8 @@ const fs = require("fs");
 const {employeeQuestions, managerQuestions, engineerQuestions, internQuestions} = require("./src/questions");
 
 
+
+
 menu = () => {
     createEmployee = async () => {
     const answers = await inquirer.prompt(employeeQuestions);
