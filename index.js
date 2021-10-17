@@ -1,11 +1,13 @@
-const Employee = require("./lib/Employee");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-const generateHTML = require("./src/generateHTML");
+const GenerateHTML = require("./src/GenerateHTML");
 const inquirer = require("inquirer");
 const fs = require("fs");
 const {employeeQuestions, managerQuestions, engineerQuestions, internQuestions} = require("./src/questions");
+const Generator = require("./src/Generator");
+let generatedTemplate = "";
+let defaultID = 1
 
 
 
