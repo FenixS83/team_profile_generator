@@ -6,7 +6,7 @@ describe(`Engineer`, () =>{
 
     test(`Successfully instantiates instance of Engineer Class`, () => {    
         const engineer = new Engineer();
-        expect(typeof(engineer).toBe(`object`));
+        expect(typeof(engineer)).toBe(`object`);
     });
 
     test(`Successfully set a engineer object via constructor arguements`, () => {   

@@ -4,7 +4,7 @@ describe(`Manager`, () =>{
 
     test(`Successfully instantiates instance of Manager Class`, () => {    
         const manager = new Manager();
-        expect(typeof(manager).toBe(`object`));
+        expect(typeof(manager)).toBe(`object`);
     });
 
     test(`Successfully set a manager object via constructor arguements`, () => {   

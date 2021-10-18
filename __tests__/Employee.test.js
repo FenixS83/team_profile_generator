@@ -6,8 +6,8 @@ describe(`Employee`, () => {
 
     test(`Successfully instantiates instance of Employee Class`, () => {    
         const employee = new Employee();
-        expect(typeof(employee).toBe(`object`));
-    })
+        expect(typeof(employee)).toBe(`object`);
+    });
 
     test(`Successfully set a employee object via constructor arguements`, () => {   
         const employee = new Employee(`Fenix`, 1, `fenix.sampson@gmail.com`);

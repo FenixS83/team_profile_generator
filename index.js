@@ -4,7 +4,7 @@ const Intern = require("./lib/Intern");
 const GenerateHTML = require("./src/GenerateHTML");
 const inquirer = require("inquirer");
 const fs = require("fs");
-const {employeeQuestions, managerQuestions, engineerQuestions, internQuestions} = require("./src/questions");
+// const {employeeQuestions, managerQuestions, engineerQuestions, internQuestions} = require("./src/questions");
 const Generator = require("./src/Generator");
 let generatedTemplate = "";
 let defaultID = 1
@@ -53,7 +53,7 @@ const starter = () => {
         .then(function({name, id, email, office}) {
           let manager = new Manager(name, id, email, office);
           let generator = new Generator();
-          generatedTemplate += `${generator.manangerGenerator(manager)}`;
+          generatedTemplate += `${Generator.manangerGenerator(manager)}`;
           menu();
         })
       } else {
@@ -119,7 +119,7 @@ const starter = () => {
     .then(function({name, id, email, github}) {
       let engineer = new Engineer(name, id, email, github);
       let generator = new Generator();
-      generatedTemplate += `\n            ${generator.engineerGenerator(engineer)}`
+      generatedTemplate += `\n            ${Generator.engineerGenerator(engineer)}`
       menu();
     })
   }
@@ -158,7 +158,7 @@ const starter = () => {
     .then(function({name, id, email, school}) {
       let intern = new Intern(name, id, email, school);
       let generator = new Generator();
-      generatedTemplate += `\n            ${generator.internGenerator(intern)}`
+      generatedTemplate += `\n            ${Generator.internGenerator(intern)}`
       menu();
     })
   }
