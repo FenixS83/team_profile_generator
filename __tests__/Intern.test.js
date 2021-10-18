@@ -45,7 +45,7 @@ describe(`Intern`, () =>{
         expect(intern.getRole()).toBe(`Intern`);
     });
 
-    test(`Should get the School username using getSchool()`, () => {
+    test(`Should get the School name using getSchool()`, () => {
         const intern = new Intern(`Gabriel`, 3, `gabriel@gabriel.com`, `MJHS`);
         expect(intern.getSchool()).toBe(`MJHS`);
     });

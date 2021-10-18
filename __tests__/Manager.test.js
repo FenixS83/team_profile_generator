@@ -44,7 +44,7 @@ describe(`Manager`, () =>{
         expect(manager.getRole()).toBe(`Manager`);
     });
 
-    test(`Should get the OfficeNumber username using getOfficeNumber()`, () => {
+    test(`Should get the OfficeNumber using getOfficeNumber()`, () => {
         const manager = new Manager(`Huston`, 4, `huston@huston.com`, 413);
         expect(manager.getOfficeNumber()).toBe(413);
     });

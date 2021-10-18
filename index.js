@@ -1,15 +1,17 @@
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
-const GenerateHTML = require("./src/GenerateHTML");
 const inquirer = require("inquirer");
 const fs = require("fs");
-// const {employeeQuestions, managerQuestions, engineerQuestions, internQuestions} = require("./src/questions");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+const Manager = require("./lib/Manager");
 const Generator = require("./src/Generator");
+const GenerateHTML = require("./src/GenerateHTML");
+const colors = require(`colors`);
+
 let generatedTemplate = "";
 let defaultID = 1
 
-
+console.log(`W E L C O M E   T O   T H E   T E A M   P R O F I L E   G E N E R A T O R`.cyan)
+console.log(`Created by FenixS83`.brightBlue)
 
 const starter = () => {
     inquirer .prompt([
@@ -53,7 +55,7 @@ const starter = () => {
         .then(function({name, id, email, office}) {
           let manager = new Manager(name, id, email, office);
           let generator = new Generator();
-          generatedTemplate += `${Generator.manangerGenerator(manager)}`;
+          generatedTemplate += `${users.manangerGenerator(manager)}`;
           menu();
         })
       } else {
@@ -166,7 +168,7 @@ const starter = () => {
   // Team generator finalize
   const endTeam = () => {
     const filename = `generatedTeam.html`;
-    const temp = new HTMLGenerator;
+    const temp = new GenerateHTML;
     fs.writeFile("./dist/" + filename, temp.template(generatedTemplate), (err) => 
     err ? console.log(err) : 
     console.log("\n\n\nYour team has been generated in the 'dist' folder.\nThanks for using the Team Generator!".brightGreen));
