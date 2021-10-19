@@ -3,8 +3,7 @@ const fs = require("fs");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
-const Generator = require("./src/Generator");
-const GenerateHTML = require("./src/GenerateHTML");
+
 const colors = require(`colors`);
 
 let employeeNames = [];
@@ -111,7 +110,7 @@ function generateHTML() {
   
   <body>
       <nav class="navbar navbar-dark bg-danger mb-8">
-          <h1 class="navbar-brand m-4 w-100 text-center">Team Profile</h1>
+          <h1 class="navbar-brand m-4 w-100 text-center">Team Profile Generator</h1>
       </nav>
       <div class="container">
           <div class="row">`;
@@ -157,14 +156,14 @@ function addHTML(teamMember) {
           </div>
       </div>`;
       } else if (role === 'Manager') {
-          const offPhoneNumber = teamMember.getOfficeNumber();
+          const offNumber = teamMember.getOfficeNumber();
           teamData = `<div class="col-sm">
           <div class="card bg-primary mx-auto my-3" style="width: 18rem">
           <h5 class="card-header text-center"><b>${name}</b><br /><br />Manager</h5>
           <ul class="list-group list-group-flush">
               <li class="list-group-item"><b>ID: </b>${id}</li>
               <li class="list-group-item"><b>Email Address: </b>${email}</li>
-              <li class="list-group-item"><b>Office Phone: </b>${offPhoneNumber}</li>
+              <li class="list-group-item"><b>Office Number: </b>${offNumber}</li>
           </ul>
           </div>
       </div>`;
