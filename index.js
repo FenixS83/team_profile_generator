@@ -7,172 +7,191 @@ const Generator = require("./src/Generator");
 const GenerateHTML = require("./src/GenerateHTML");
 const colors = require(`colors`);
 
+let employeeNames = [];
 let generatedTemplate = "";
 let defaultID = 1
 
 console.log(`W E L C O M E   T O   T H E   T E A M   P R O F I L E   G E N E R A T O R`.cyan)
-console.log(`Created by FenixS83`.brightBlue)
+console.log(`Created by FenixS83`.brightYellow)
+function init() {
+  generateHTML();
+  addTeamMember();
+}
 
-const starter = () => {
-    inquirer .prompt([
-      {
-        type: 'confirm',
-        message: "Would you like to add a manager?".brightGreen,
-        name: 'manager',
+function addTeamMember() {
+  inquirer.prompt([{
+      type: 'input',
+      name: 'name',
+      message: 'What is the team members name you would like to add?'
+  },
+
+  {
+      type: 'list',
+      name: 'role',
+      message: 'Please select the role of the team member you just added.',
+      choices: [
+          'Engineer',
+          'Intern',
+          'Manager',
+      ]
+  },
+
+  {
+      type: 'input',
+      name: 'id',
+      message: 'What is the ID number of the team member you just added?'
+  },
+
+  {
+      type: 'input',
+      name: 'email',
+      message: 'What is the email address of the team member you just added?'
+  }])
+
+  .then(function({name, role, id, email}) {
+      let employeeInfo = "";
+      if (role === 'Engineer') {
+          employeeInfo = 'GitHub username';
+      } else if (role === 'Intern') {
+          employeeInfo = 'school attended';
+      } else {
+          employeeInfo = 'office number'
+      }
+
+      inquirer.prompt([{
+          type: 'input',
+          name: 'employeeInfo',
+          message: `Please enter the ${employeeInfo} of the member you just added.`
       },
-    ])
-    .then(({manager}) => {
-      if(manager){
-        inquirer.prompt([
-          {
-            type: 'input',
-            message: "What is the team manager's name?".brightMagenta,
-            name: 'name',
-            validate: (value) => {if (value){return true} else 
-            {return console.log("Please enter a valid name".red.dim)}}
-          },
-          {
-            type: 'input',
-            message: "What is the team manager's employee id?".brightMagenta,
-            name: 'id',
-            default: defaultID
-          },
-          {
-            type: 'input',
-            message: "What is the team manager's email address?".brightMagenta,
-            name: 'email',
-            validate: (value) => {if (value){return true} else 
-            {return console.log("Please enter a valid email address".red.dim)}}
-          },
-          {
-            type: 'input',
-            message: "What is the team manager's office number?".brightMagenta,
-            name: 'office',
-            validate: (value) => {if (value){return true} else 
-            {return console.log("Please enter a valid office number".red.dim)}}
+  
+      {
+          type: 'list',
+          name: 'addMoreMembers',
+          message: 'Would you like to add another team member?',
+          choices: [
+              'yes',
+              'no'
+          ]
+      }])
+
+      .then(function({employeeInfo, addMoreMembers}) {
+          let newTeamMember;
+          if (role === 'Engineer') {
+              newTeamMember = new Engineer(name, id, email, employeeInfo);
+          } else if (role === 'Intern') {
+              newTeamMember = new Intern(name, id, email, employeeInfo);
+          } else if (role === 'Manager') {
+              newTeamMember = new Manager(name, id, email, employeeInfo);
           }
-        ])
-        .then(function({name, id, email, office}) {
-          let manager = new Manager(name, id, email, office);
-          let generator = new Generator();
-          generatedTemplate += `${users.manangerGenerator(manager)}`;
-          menu();
-        })
-      } else {
-        defaultID = 0;
-        menu();
-      }
-    }) 
-  }
+
+          employeeNames.push(newTeamMember);
+          addHTML(newTeamMember)
+          .then(function() {
+              if (addMoreMembers === "yes") {
+                  addTeamMember();
+              } else {
+                  endHTML();
+              }
+          });
+      });
+  });
+}
+
+function generateHTML() {
+  const html = `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <title>Team Profile Generator</title>
+  </head>
   
-  // Employee type
-  const menu = () => {
-    defaultID++
-    inquirer.prompt([
-      {
-        type: 'list',
-        message: "Please select a new employee or end the selection...".brightGreen,
-        name: 'menu',
-        choices: ["Engineer".brightBlue, "Intern".brightYellow, "End".brightRed]
+  <body>
+      <nav class="navbar navbar-dark bg-danger mb-8">
+          <h1 class="navbar-brand m-4 w-100 text-center">Team Profile</h1>
+      </nav>
+      <div class="container">
+          <div class="row">`;
+
+  fs.writeFile('./dist/index.html', html, function(err) {
+      if (err) {
+          console.log(err);
       }
-    ])
-    .then((response) => {
-      if (response.menu === "Engineer".brightBlue) {
-        engineerQuesitons();
-      } else if (response.menu === "Intern".brightYellow) {
-        internQuestions();
-      } else {
-        endTeam();
+  });
+  console.log('starting HTML');
+}
+
+function addHTML(teamMember) {
+  return new Promise(function(resolve, reject) {
+      const name = teamMember.getName();
+      const role = teamMember.getRole();
+      const id = teamMember.getId();
+      const email = teamMember.getEmail();
+
+      let teamData = "";
+      if (role === 'Engineer') {
+          const gitHubAcct = teamMember.getGithub();
+          teamData = `<div class="col-sm">
+          <div class="card bg-primary mx-auto my-3" style="width: 18rem">
+          <h5 class="card-header text-center"><b>${name}</b><br /><br />Engineer</h5>
+          <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>ID: </b>${id}</li>
+              <li class="list-group-item"><b>Email Address: </b>${email}</li>
+              <li class="list-group-item"><b>GitHub: </b>${gitHubAcct}</li>
+          </ul>
+          </div>
+      </div>`;
+      } else if (role === 'Intern') {
+          const school = teamMember.getSchool();
+          teamData = `<div class="col-sm">
+          <div class="card bg-primary mx-auto my-3" style="width: 18rem">
+          <h5 class="card-header text-center"><b>${name}</b><br /><br />Intern</h5>
+          <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>ID: </b>${id}</li>
+              <li class="list-group-item"><b>Email Address: </b>${email}</li>
+              <li class="list-group-item"><b>School: </b>${school}</li>
+          </ul>
+          </div>
+      </div>`;
+      } else if (role === 'Manager') {
+          const offPhoneNumber = teamMember.getOfficeNumber();
+          teamData = `<div class="col-sm">
+          <div class="card bg-primary mx-auto my-3" style="width: 18rem">
+          <h5 class="card-header text-center"><b>${name}</b><br /><br />Manager</h5>
+          <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>ID: </b>${id}</li>
+              <li class="list-group-item"><b>Email Address: </b>${email}</li>
+              <li class="list-group-item"><b>Office Phone: </b>${offPhoneNumber}</li>
+          </ul>
+          </div>
+      </div>`;
       }
-    })
-  }
+      console.log("adding team member");
+      fs.appendFile('./dist/index.html', teamData, function (err) {
+          if ( err) {
+              return reject(err);
+          };
+          return resolve();
+      });
+  });
+}
+
+function endHTML() {
+  const endHTML = ` </div>
+  </div>
   
-  // Engineer questions
-  const engineerQuesitons = () => {
-    inquirer.prompt([ 
-      {
-        type: 'input',
-        message: "What is the engineer's name?".brightBlue,
-        name: 'name',
-        validate: (value) => {if (value){return true} else 
-        {return console.log("Please enter a valid name".red.dim)}}
-      },
-      {
-        type: 'input',
-        message: "what is the engineer's employee ID?".brightBlue,
-        name: 'id',
-        default: defaultID
-      },
-      {
-        type: 'input',
-        message: "What is the engineer's email address?".brightBlue,
-        name: 'email',
-        validate: (value) => {if (value){return true} else 
-        {return console.log("Please enter a valid email address".red.dim)}}
-      },
-      {
-        type: 'input',
-        message: "What is the engineer's Github username?".brightBlue,
-        name: 'github',
-        validate: (value) => {if (value){return true} else 
-        {return console.log("Please enter a valid Github username".red.dim)}}
-      }
-    ])
-    .then(function({name, id, email, github}) {
-      let engineer = new Engineer(name, id, email, github);
-      let generator = new Generator();
-      generatedTemplate += `\n            ${Generator.engineerGenerator(engineer)}`
-      menu();
-    })
-  }
-  
-  // Intern questions
-  const internQuestions = () => {
-    inquirer.prompt([ 
-      {
-        type: 'input',
-        message: "What is the intern's name?".brightYellow,
-        name: 'name',
-        validate: (value) => {if (value){return true} else 
-        {return console.log("Please enter a valid name".red.dim)}}
-      },
-      {
-        type: 'input',
-        message: "What is the intern's employee ID?".brightYellow,
-        name: 'id',
-        default: defaultID
-      },
-      {
-        type: 'input',
-        message: "What is the intern's email address?".brightYellow,
-        name: 'email',
-        validate: (value) => {if (value){return true} else 
-        {return console.log("Please enter a valid email address".red.dim)}}
-      },
-      {
-        type: 'input',
-        message: "What school did the Intern attend?".brightYellow,
-        name: 'school',
-        validate: (value) => {if (value){return true} else 
-        {return console.log("Please enter a valid school".red.dim)}}
-      }
-    ])
-    .then(function({name, id, email, school}) {
-      let intern = new Intern(name, id, email, school);
-      let generator = new Generator();
-      generatedTemplate += `\n            ${Generator.internGenerator(intern)}`
-      menu();
-    })
-  }
-  
-  // Team generator finalize
-  const endTeam = () => {
-    const filename = `generatedTeam.html`;
-    const temp = new GenerateHTML;
-    fs.writeFile("./dist/" + filename, temp.template(generatedTemplate), (err) => 
-    err ? console.log(err) : 
-    console.log("\n\n\nYour team has been generated in the 'dist' folder.\nThanks for using the Team Generator!".brightGreen));
-  }
-  
-  //////////////////////////////////////RUN//////////////////////////////////////
-  starter();
+</body>
+</html>`;
+
+  fs.appendFile('./dist/index.html', endHTML, function(err) {
+      if (err) {
+          console.log(err);
+      };
+  });
+  console.log('end of HTML');
+}
+
+init();
