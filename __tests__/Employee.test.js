@@ -1,3 +1,5 @@
+// Employee test
+
 const Employee = require('../lib/Employee');
 
 // Employee contains name, id and email properties

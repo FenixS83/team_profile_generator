@@ -1,3 +1,4 @@
+// Manager test
 const Manager = require(`../lib/Manager`)
 //Manager contains officeNumber
 describe(`Manager`, () =>{

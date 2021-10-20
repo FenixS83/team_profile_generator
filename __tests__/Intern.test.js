@@ -1,3 +1,4 @@
+//Intern Test
 const Intern = require(`../lib/Intern`)
 
 //Intern requires school
